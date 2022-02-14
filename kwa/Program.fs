@@ -82,3 +82,31 @@ let main argv =
     |> List.iter (printf "%s\r\n")
 
     0
+
+(*
+let main2 argv =
+    let x0: Async<Result<List<string>, string>> = 
+        [1..19]
+        |> List.map (getUrlForPage >> getPage)  // ( (int -> Uri) o (Uri -> Async<Result<string, string>>) )    -> List<Async<Result<string, string>>> 
+        |> List.sequenceAsyncA                  // List<Async<Result<string, string>>>                          -> Async<List<Result<string, string>>>
+        |> Async.map List.sequenceResultA       // Async<List<Result<string, string>>>                          -> Async<Result<List<string>, string>>>
+
+    let x01 = //: Async<Result<List<List<Result<Article, string>>>, string>> = 
+        x0
+        |> Async.map (Result.map (List.map extractArticlesFromPage))    // Async<Result<List<string>, string>>> -> Async<Result<List<List<Result<Article, string>>>, string>>>
+    
+    let x1 =
+        x01
+        |> Async.RunSynchronously               // Async<Result<List<Article>, string>>>                        -> Result<List<Article>, string>>
+
+    let x2 = 
+        x1 
+        |> Result.map (List.collect id)         // Result<List<Article>, string>>                               -> 
+    
+    x2
+        |> Result.fold (List.map <| Result.fold Article ArticleError) (ArticleError >> List.singleton)
+        |> List.collect CsvRecord.toCsvLine
+        |> List.iter (printf "%s\r\n")
+
+    0
+*)
